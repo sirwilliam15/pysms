@@ -1,0 +1,4 @@
+
+
+class ThingSpace():
+    pass
