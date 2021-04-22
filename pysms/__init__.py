@@ -1,3 +1,3 @@
-from att import ATT, ControlCenter
-from verizon import ThingSpace
-from twilio import Twilios
+from att import ATT, ATTControlCenter
+from verizon import VerizonThingSpace
+from twilio import Twilio
