@@ -1,4 +1,6 @@
 from threading import Thread
+from multiprocessing import Pool
+from datetime import datetime
 
 def join_threads(threads):
     for t in threads:
@@ -30,3 +32,15 @@ class DeviceManager():
 
         t = Thread(target=join_threads, args=(_threads, ))
         t.start()
+
+    def read_all(self, time=datetime.now().date()):
+        _times = [time] * len(self.devices)
+        _threads = []
+
+        _history = Pool(self.get_sms_history, args=(self.devices, _times))
+
+        sms_history = {}
+        for dev, msg, in zip(self.devices, _history):
+            sms_history[d] = msg
+
+        return sms_history
