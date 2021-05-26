@@ -1,5 +1,9 @@
 from threading import Thread
 
+def join_threads(threads):
+    for t in threads:
+        t.join()
+
 class ApiRequestError(Exception):
     def __init__(self, message):
         super().__init__(message)
@@ -24,5 +28,5 @@ class DeviceManager():
             _threads.append(t)
             t.start()
 
-        for t in _threads:
-            t.join()
+        t = Thread(target=join_threads, args=(_threads, ))
+        t.start()
