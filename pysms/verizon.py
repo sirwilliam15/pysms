@@ -34,5 +34,5 @@ class VerizonThingSpace(DeviceManager):
     def get_sms_history(self, phone=None, from_date=datetime.now().date(), all_msgs=False):
         """
         """
-        if iccid is None:
-            iccid = self.current
+        if phone is None:
+            phone = self.current
