@@ -8,8 +8,8 @@ from .pysms import ApiRequestError, DeviceManager
 
 class Twilio(DeviceManager):
     
-    def __init__(self, api_key, account_id):
-        super().__init__()
+    def __init__(self, api_key, account_id, identifier='phone'):
+        super().__init__(identifier)
         self.client = twilio.rest.Client(account_id, api_key)
 
     def send_sms(self, message, phone=None, wait=False, timeout=10):

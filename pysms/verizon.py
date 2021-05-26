@@ -7,8 +7,8 @@ from .pysms import ApiRequestError, DeviceManager
 class VerizonThingSpace(DeviceManager):
     base_url = 'https://staging.thingspace.verizon.com/api/'
     
-    def __init__(self, app_key, api_key):
-        super().__init__()
+    def __init__(self, app_key, api_key, identifier='phone'):
+        super().__init__(identifier)
         self.account = account_id
         self.header = self._start_session(app_key, api_key)
 
@@ -28,7 +28,7 @@ class VerizonThingSpace(DeviceManager):
     def send_sms(self, message, phone=None, wait=False, timeout=10):
         """
         """
-        if phone is None:
+        if phone is None: 
             phone = self.current
 
     def get_sms_history(self, phone=None, from_date=datetime.now().date(), all_msgs=False):

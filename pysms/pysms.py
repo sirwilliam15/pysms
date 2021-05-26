@@ -11,17 +11,19 @@ class ApiRequestError(Exception):
         super().__init__(message)
 
 class DeviceManager():
-    def __init__(self):
+    def __init__(self, identifier):
         self.current = None
-        self.devices = []
+        self.identifier = identifier
+        self.devices = {}
 
-    def add_device(self, iccid):
-        self.devices.append(iccid)
+    def add_device(self, **kwargs):
+        self.devices[kwargs[self.identifier]] = kwargs
 
-    def switch_device(self, iccid):
-        self.current = iccid
-        if iccid not in self.devices:
-            self.add_device(iccid)
+    def switch_device(self, id):
+        try:
+            self.current = self.devices[id]
+        except KeyError:
+            raise KeyError('Device {} not in added devices'.format(id))
 
     def send_all(self, message):
         _threads = []

@@ -11,8 +11,8 @@ class ATT():
 class ATTControlCenter(DeviceManager):
     base_url = 'https://api-iotdevice.att.com/rws/api/v1'
 
-    def __init__(self, username, api_key, account_id):
-        super().__init__()
+    def __init__(self, username, api_key, account_id, identifier='iccid'):
+        super().__init__(identifier)
         self.account = account_id
         self.header = {
             'Authorization': 'Basic %s'%(b64encode('%s:%s'%(username, api_key).encode())).decode(),
