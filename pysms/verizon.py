@@ -15,7 +15,7 @@ class VerizonThingSpace(DeviceManager):
     def _start_session(self, app_key, api_key):
         """
         """
-        url = '%s/ts/v1/oauth2/token?grant_type=client_credentials'%base_url
+        url = '%s/ts/v1/oauth2/token?grant_type=client_credentials'%self.base_url
         header = {
             'Authorization': 'Basic %s'%(b64encode('%s:%s'%(app_key, api_key).encode())).decode(),
             'Content-Type': 'application/x-www-form-urlencoded'

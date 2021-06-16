@@ -1,4 +1,6 @@
 import requests
+import json
+import time
 from base64 import b64encode
 from datetime import datetime
 
@@ -31,8 +33,8 @@ class ATTControlCenter(DeviceManager):
         if iccid is None:
             iccid = self.current
         try:
-            response = requests.post('%s/devices/%d/smsMessages'%(atturl, int(iccid)),
-                                        headers=attheader, data=json.dumps({'messageText': message}).encode('utf-8'))
+            response = requests.post('%s/devices/%d/smsMessages'%(self.base_url, int(iccid)),
+                                        headers=self.header, data=json.dumps({'messageText': message}).encode('utf-8'))
             data = response.json()
             smsid = data['smsMessageId']
 
@@ -59,8 +61,8 @@ class ATTControlCenter(DeviceManager):
         if iccid is None:
             iccid = self.current
         try:
-            response = requests.get('%s/devices/%d/sessionInfo'%(atturl, int(iccid)),
-                                        headers=attheader, params={'iccid': int(iccid)})
+            response = requests.get('%s/devices/%d/sessionInfo'%(self.base_url, int(iccid)),
+                                        headers=self.header, params={'iccid': int(iccid)})
             data = response.json()
             try:
                 sessionEnd = datetime.strptime(data['dateSessionEnded'], '%Y-%m-%d %H:%M:%S.%f%z')
@@ -77,14 +79,14 @@ class ATTControlCenter(DeviceManager):
         except KeyError:
             return data['errorMessage']
 
-    def get_sms_details(smsid):
+    def get_sms_details(self, smsid):
 
         parameters = {
             'smsMsgId':smsid,
         }
 
-        url = '%s/smsMessages/%d'%(base_url, smsid)
-        response = requests.get(url, headers=auth_head, params=parameters)
+        url = '%s/smsMessages/%d'%(self.base_url, smsid)
+        response = requests.get(url, headers=self.header, params=parameters)
         return response.json()
 
     def get_sms_history(self, iccid=None, from_date=datetime.now().date(), all_msgs=False):
@@ -109,7 +111,7 @@ class ATTControlCenter(DeviceManager):
             'iccid': int(iccid), 
             'fromDate': time
             }
-        response = requests.get('%s/smsMessages'%atturl, headers=attheader, params=parameters)
+        response = requests.get('%s/smsMessages'%self.base_url, headers=self.header, params=parameters)
         data = response.json()['smsMsgIds']
 
         sms_history = []

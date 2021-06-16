@@ -43,6 +43,6 @@ class DeviceManager():
 
         sms_history = {}
         for dev, msg, in zip(self.devices, _history):
-            sms_history[d] = msg
+            sms_history[dev] = msg
 
         return sms_history
