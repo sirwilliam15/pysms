@@ -2,7 +2,7 @@ import requests
 import json
 import time
 from base64 import b64encode
-from datetime import datetime
+from datetime import datetime, timezone
 
 from .pysms import ApiRequestError, DeviceManager
 
@@ -104,7 +104,7 @@ class ATTControlCenter(DeviceManager):
         """
         if iccid is None:
             iccid = self.current
-        time = from_date.strftime('%Y-%m-%dT%H:%M:%S%z')
+        time = from_date.strftime('%Y-%m-%dT%H:%M:%S') + datetime.now(timezone.utc).astimezone().strftime('%z')
 
         parameters = {
             'accountID': self.account, 
