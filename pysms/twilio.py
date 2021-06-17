@@ -8,6 +8,7 @@ from twilio.base.exceptions import TwilioRestException
 from .pysms import ApiRequestError, DeviceManager
 
 class TwilioClient(DeviceManager):
+    service = 'twilio'
     
     def __init__(self, api_key, account_id, phone=None, identifier='phone'):
         super().__init__(identifier)

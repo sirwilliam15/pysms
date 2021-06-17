@@ -12,6 +12,7 @@ class ATT():
 
 class ATTControlCenter(DeviceManager):
     base_url = 'https://api-iotdevice.att.com/rws/api/v1'
+    service = 'att'
 
     def __init__(self, username, api_key, account_id, identifier='iccid'):
         super().__init__(identifier)
@@ -23,7 +24,7 @@ class ATTControlCenter(DeviceManager):
 
     def send_sms(self, message, iccid=None, wait=False, timeout=10):
         """
-            Sends SMS to Registered Device\n
+            Sends SMS to Registered Device
             Arguments
             ---------
             - Message : str
@@ -92,15 +93,7 @@ class ATTControlCenter(DeviceManager):
     def get_sms_history(self, iccid=None, from_date=datetime.now().date(), all_msgs=False):
         """
         Requests and returns array of SMS history
-        If all_msgs is True, return will include sent messages\n
-        Arguments
-        ---------
-        - From Date : datetime
-        - All Messages : bool
-        Examples
-        --------
-        | ${msgs}= | Get SMS History | # Get Messages from Today | | |
-        | ${msgs}= | Get SMS History | 1/1/2021 | all_msgs=${TRUE} | # Gets all messages from 1/1 |
+        If all_msgs is True, return will include sent messages
         """
         if iccid is None:
             iccid = self.current

@@ -27,6 +27,9 @@ class DeviceManager():
             raise KeyError('Device {} not in added devices'.format(id))
 
     def send_all(self, message):
+        if self.service == 'verizon':
+            self.send_sms(message, [i[self.identifier] for i in self.devices])
+            return
         _threads = []
         for device in self.devices:
             t = Thread(target=self.send_sms, args=(message, device))
