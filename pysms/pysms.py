@@ -18,6 +18,7 @@ class DeviceManager():
 
     def add_device(self, **kwargs):
         self.devices[kwargs[self.identifier]] = kwargs
+        self.current = kwargs[self.identifier]
 
     def switch_device(self, id):
         try:

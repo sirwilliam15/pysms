@@ -17,7 +17,7 @@ class ATTControlCenter(DeviceManager):
         super().__init__(identifier)
         self.account = account_id
         self.header = {
-            'Authorization': 'Basic %s'%(b64encode('%s:%s'%(username, api_key).encode())).decode(),
+            'Authorization': 'Basic %s'%(b64encode(('%s:%s'%(username, api_key)).encode())).decode(),
             'Content-Type': 'application/json'
         }
 
@@ -116,8 +116,8 @@ class ATTControlCenter(DeviceManager):
 
         sms_history = []
         for smsid in data:
-            response = self.get_sms_details(smsid)
-            if r['sentTo'] == 'Server' or all_msgs:
-                sms_history.append(r)
+            details = self.get_sms_details(smsid)
+            if details['sentTo'] == 'Server' or all_msgs:
+                sms_history.append(details)
 
         return sms_history
