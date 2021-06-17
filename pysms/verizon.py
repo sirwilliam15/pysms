@@ -5,9 +5,10 @@ from datetime import datetime
 from .pysms import ApiRequestError, DeviceManager
 
 class VerizonThingSpace(DeviceManager):
-    base_url = 'https://staging.thingspace.verizon.com/api/'
+    base_url = 'https://staging.thingspace.verizon.com/api'
+    service = 'verizon'
     
-    def __init__(self, app_key, api_key, identifier='phone'):
+    def __init__(self, app_key, api_key, identifier='iccid'):
         super().__init__(identifier)
         self.account = account_id
         self.header = self._start_session(app_key, api_key)
@@ -25,14 +26,39 @@ class VerizonThingSpace(DeviceManager):
             token = c.value
         
     
-    def send_sms(self, message, phone=None, wait=False, timeout=10):
+    def send_sms(self, message, iccid=None, wait=False, timeout=10):
         """
         """
-        if phone is None: 
-            phone = self.current
+        if iccid is None: 
+            iccid = self.current[self.identifier]
+        elif type(iccid) == dict:
+            iccid = [iccid[self.identifier]]
+        elif type(iccid) == int or type(iccid) == str:
+            iccid = [iccid]
 
-    def get_sms_history(self, phone=None, from_date=datetime.now().date(), all_msgs=False):
+        sent_time = datetime.now()
+        response = requests.get('%s/m2m/v1/sms/%s/history'%(self.base_url, self.account)
+                                    headers=self.header, params={
+                                        'accountName': self.account,
+                                        'kind': self.identifier.upper()
+                                        'deviceIds': iccid,
+                                        'smsMessage': message
+                                    })
+        return sent_time
+
+        
+
+    def get_sms_history(self, iccid=None, from_date=datetime.now().date(), all_msgs=False):
         """
         """
-        if phone is None:
-            phone = self.current
+        if iccid is None:
+            iccid = self.current
+
+        
+        response = requests.get('%s/m2m/v1/sms/%s/history'%(self.base_url, self.account)
+                                    headers=self.header, params={
+                                        'accountName': self.account,
+                                    })
+        
+        return response['messages']
+        
